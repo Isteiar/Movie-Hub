@@ -50,9 +50,12 @@ export const getPaginatedMovies = async (req: Request, res: Response) => {
       .limit(limit)
       .populate("reviews");
 
+    const totalMovies = await MovieModel.countDocuments();
+
     res.send({
       message: "Paginated movie is found",
       response: paginatedMovies,
+      totalMovies,
     });
   } catch (err) {
     console.log("Error: ", err);
