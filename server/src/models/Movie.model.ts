@@ -5,6 +5,7 @@ const movieSchema = new Schema<IMovie>(
   {
     title: { type: String, required: true, trim: true },
     thumbnail: { type: String, required: [true, "Movie thumnail is required"] },
+    duration: { type: Number, required: true },
     description: {
       type: String,
       required: [true, "Movie description is required"],

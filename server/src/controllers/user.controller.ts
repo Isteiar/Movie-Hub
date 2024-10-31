@@ -13,6 +13,7 @@ export const createUser = async (req: Request, res: Response) => {
       res.status(400).send({
         message: "User with this email already exists",
       });
+      return;
     }
 
     //hashing password
@@ -27,7 +28,7 @@ export const createUser = async (req: Request, res: Response) => {
 
     res.status(201).send({ message: "New user is created", response: newUser });
   } catch (err) {
-    res.status(400).json({ message: "Could not create user", error: err });
+    res.status(400).send({ message: "Could not create user", error: err });
   }
 };
 
@@ -43,14 +44,15 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const validPassword = compare(password, user.password);
+    const validPassword = await compare(password, user.password);
 
     if (!validPassword) {
       res.status(401).send({ message: "Invalid email or password" });
+      return;
     }
 
     //generate token
-    const accessToken = sign({ id: user.id }, process.env.SECRET as string);
+    const accessToken = sign({ id: user._id }, process.env.SECRET as string);
 
     res
       .status(200)

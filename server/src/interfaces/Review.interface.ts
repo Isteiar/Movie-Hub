@@ -1,8 +1,8 @@
-import { Types } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface IReview extends Document {
-  user: Types.ObjectId;
-  movie: Types.ObjectId;
   rating: number;
   review: string;
+  user: Types.ObjectId;
+  movie: Types.ObjectId;
 }

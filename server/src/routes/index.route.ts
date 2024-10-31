@@ -8,6 +8,7 @@ const router = Router();
 
 router.use("/user", userRouter);
 
+
 router.use("/movies", movieRouter);
 router.use("/genres", genreRouter);
 router.use("/reviews", reviewRouter);
