@@ -1,29 +1,44 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { IMovie } from "./interfaces/Movie.interface";
-import { getPaginatedMovies } from "./services/movie.service";
+import { searchMovies } from "./services/movie.service";
 import AllMovies from "./pages/AllMoviesPage";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [movieList, setMovieList] = useState<IMovie[]>([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [maxPage, setMaxPage] = useState(10);
-
-  useEffect(() => {
-    fetchMovies();
-  }, [pageNumber]);
+  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [maxPage, setMaxPage] = useState<number>(0);
+  const [search, setSearch] = useState("");
 
   // const fetchMovies = async () => {
   //   const data = await getAllMovies();
   //   setMovieList(data || []); //here we use [].because if the data is undefine
   // };
 
-  const fetchMovies = async () => {
-    const data = await getPaginatedMovies(pageNumber, 10);
+  useEffect(() => {
+    fetchSearchedMovies();
+  }, [search,pageNumber]);
+
+  const fetchSearchedMovies = async () => {
+    const pageSize = 12;
+    const data = await searchMovies(search, pageNumber, pageSize);
     // console.log("data: ", data);
     setMovieList(data?.response || []); //here we use [].because if the data is undefine
-    setMaxPage(Math.floor((data?.totalMovies || 0) / 10));
+    setMaxPage(Math.floor((data?.totalMovies || 0) / pageSize));
   };
+
+  // useEffect(() => {
+  //   fetchMovies();
+  // }, [pageNumber]);
+
+  // const fetchMovies = async () => {
+  //   const pageSize = 12;
+  //   const data = await getPaginatedMovies(pageNumber, pageSize);
+  //   // console.log("data: ", data);
+  //   setMovieList(data?.response || []); //here we use [].because if the data is undefine
+  //   setMaxPage(Math.floor((data?.totalMovies || 0) / pageSize));
+  // };
 
   const handlePreviousButton = () => {
     setPageNumber((curr) => {
@@ -32,19 +47,22 @@ function App() {
   };
   const handleNextButton = () => {
     setPageNumber((curr) => {
-      return curr <= maxPage ? curr + 1 : curr;
+      return curr < maxPage ? curr + 1 : curr;
     });
   };
 
   return (
-    <div className="bg-gray-400 h-screen w-full overflow-y-auto ">
-      <AllMovies
-        movieList={movieList}
-        currentPage ={pageNumber}
-        handlePreviousButton={handlePreviousButton}
-        handleNextButton={handleNextButton}
-      />
-    </div>
+    <>
+      <Navbar setSearch={setSearch} search={search} />
+      <div className="bg-gray-400 h-screen w-full overflow-y-auto ">
+        <AllMovies
+          movieList={movieList}
+          currentPage={pageNumber}
+          handlePreviousButton={handlePreviousButton}
+          handleNextButton={handleNextButton}
+        />
+      </div>
+    </>
   );
 }
 

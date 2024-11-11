@@ -16,12 +16,12 @@ const AllMoviesPage = ({
 }: MovieListPrpos) => {
   return (
     <div>
-      <div className="max-w-screen-lg mx-auto p-4 grid grid-cols-5 gap-6 bg-gray-300">
+      <div className="flex flex-wrap pt-20 gap-4 w-full max-w-7xl justify-center mx-auto">
         {movieList.map((movie) => (
           <MovieCard key={movie._id} movie={movie} />
         ))}
       </div>
-      <div className="bg-slate-100 flex justify-center items-center gap-2 p-2 rounded-lg">
+      <div className="bg-slate-100 max-w-screen-sm mx-auto m-8 flex justify-center items-center gap-2 p-2 rounded-lg">
         <button onClick={handlePreviousButton}>
           <GrFormPrevious />
         </button>

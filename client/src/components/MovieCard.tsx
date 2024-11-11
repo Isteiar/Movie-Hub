@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { IMovie } from "../interfaces/Movie.interface";
+import { CiCirclePlus } from "react-icons/ci";
 
 type MovieProps = {
   movie: IMovie;
@@ -6,16 +8,19 @@ type MovieProps = {
 
 const MovieCard = ({ movie }: MovieProps) => {
   return (
-    <div className="max-w-sm bg-slate-100 p-2 rounded-md ">
-      <div>
+    <div className="w-1/5 relative transition delay-150 hover:scale-105 duration-300">
+      <Link to={`/movie-details/${movie._id}`}>
         <img
-          className="w-full h-64 object-cover"
           src={movie.thumbnail}
           alt={`${movie.title} Poster`}
-        />
-      </div>
-      <div>
-        <div className="text-2xl">{movie.title}</div>
+          className=" h-full"
+          />
+      </Link>
+      <div className=" absolute flex justify-between items-center  bottom-0 w-full px-4 py-2 bg-gray-800 opacity-50 hover:opacity-80 gap-2">
+        <h4 className="text-xl text-white  opacity-100">{movie.title}</h4>
+        <h4 className="text-3xl text-white  opacity-100">
+          <CiCirclePlus className="hover:text-orange-500" />
+        </h4>
       </div>
     </div>
   );

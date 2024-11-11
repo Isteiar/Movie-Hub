@@ -63,21 +63,26 @@ export const getPaginatedMovies = async (req: Request, res: Response) => {
   }
 };
 
-//get all movies
-export const getAllMovies = async (req: Request, res: Response) => {
-  try {
-    const allMovies = await MovieModel.find().populate("reviews");
-    res.send(allMovies);
-  } catch (err) {
-    res.status(500).send({ message: "Can't get movies", error: err });
-  }
-};
+// //get all movies
+// export const getAllMovies = async (req: Request, res: Response) => {
+//   try {
+//     const allMovies = await MovieModel.find().populate("reviews");
+//     res.send(allMovies);
+//   } catch (err) {
+//     res.status(500).send({ message: "Can't get movies", error: err });
+//   }
+// };
 
-//get single movie
+//get single movie by movieId
 export const getSingleMovie = async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = req.params.id; //movieId from frontend
   try {
-    const singleMovie = await MovieModel.findById(id).populate("reviews");
+    const singleMovie = await MovieModel.findById(id).populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+      },
+    });
     res.send(singleMovie);
   } catch (err) {
     res.status(500).send({ message: "Can't get movie", error: err });
@@ -96,5 +101,61 @@ export const addAllMovies = async (req: Request, res: Response) => {
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: "Movies are not added " });
+  }
+};
+
+//get all filtered movie
+export const getFilteredMovies = async (req: Request, res: Response) => {
+  const { title, pageNumber, pageSize, genre, release, rating } = req.body;
+  try {
+    if (pageNumber === undefined) {
+      res.send({ message: "Page number is required" });
+      return;
+    }
+    if (!pageSize) {
+      res.send({ message: "Page size is required" });
+      return;
+    }
+    const page = parseInt(pageNumber as string);
+    const limit = parseInt(pageSize as string);
+
+    if (Number.isNaN(page) || Number.isNaN(limit)) {
+      res.send({ message: "Invalid page number or page size" });
+      return;
+    }
+
+    const skip = pageNumber * pageSize;
+
+    const query: any = {};
+    if (title && typeof title === "string") {
+      query.title = new RegExp(title, "i");
+    }
+
+    if (genre && typeof genre === "string") {
+      query.genre = genre;
+    }
+
+    if (release && !isNaN(Number(release))) {
+      query.releaseYear = Number(release);
+    }
+
+    if (rating && !isNaN(Number(rating))) {
+      query.rating = { $gte: Number(rating) };
+    }
+    
+    const totalMovies = await MovieModel.countDocuments(query);
+
+    const movies = await MovieModel.find(query)
+      .skip(skip)
+      .limit(limit)
+      .populate("reviews");
+
+    res.send({
+      message: "Movie is found",
+      response: movies,
+      totalMovies,
+    });
+  } catch (err) {
+    res.status(500).send({ message: "Error searching movies", err });
   }
 };

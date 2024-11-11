@@ -1,10 +1,9 @@
-import { FC } from "react";
 import { getToken } from "../services/token.services";
 import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute: FC = () => {
+const ProtectedRoute = () => {
   const isLoggedIn = !!getToken();
-  console.log(isLoggedIn);
+  // console.log(isLoggedIn);
   return isLoggedIn ? <Navigate to={"/"} /> : <Outlet />;
 };
 

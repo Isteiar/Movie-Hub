@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IUser } from "../interfaces/User.interface";
-import { login } from "../services/auth.services";
+import { getLoggedInUserInfo, login } from "../services/auth.services";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { setToken } from "../services/token.services";
@@ -14,10 +14,11 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
       const tokenData = await login(loginData);
 
-      console.log(tokenData.access_token);
+      // console.log(tokenData.access_token);
 
       setToken(tokenData.access_token); //set token in local storage
 

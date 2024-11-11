@@ -2,7 +2,7 @@ import fs, { writeFile } from "fs/promises";
 import { AllData, IMovie } from "./interfaces/MovieData.interface";
 
 async function main() {
-  const data = await fs.readFile("./dbjson/db.json", "utf-8");
+  const data = await fs.readFile("./dbjson/db.json", "utf-8"); //file read
   const parsedData: AllData = JSON.parse(data);
 
   // console.log(

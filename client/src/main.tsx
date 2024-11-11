@@ -7,11 +7,17 @@ import App from "./App.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import MovieDetailsPage from "./pages/MovieDetailsPage.tsx";
+import NotFoundPage from "./pages/NotFoundPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/movie-details/:movieId",
+    element: <MovieDetailsPage />,
   },
   {
     element: <ProtectedRoute />, // Protected routes
@@ -20,12 +26,15 @@ const router = createBrowserRouter([
       { path: "/register", element: <RegisterPage /> },
     ],
   },
+  {
+    path: "/*",
+    element: <NotFoundPage />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ToastContainer position="bottom-right" />
-
     <RouterProvider router={router} />
   </StrictMode>
 );

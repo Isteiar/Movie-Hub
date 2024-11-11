@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UserModel } from "../models/User.model";
 import { compare, hash } from "bcrypt";
 import { sign } from "jsonwebtoken";
+import { IAuthRequest } from "../interfaces/AuthRequest.interface";
 
 export const createUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -44,10 +45,10 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const validPassword = await compare(password, user.password);
+    const validPassword = await compare(password, user.password); //(frontendPassword,dbPassword)
 
     if (!validPassword) {
-      res.status(401).send({ message: "Invalid email or password" });
+      res.status(401).send({ message: "Invalid password" });
       return;
     }
 
@@ -71,4 +72,9 @@ export const getAllUsers = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).send({ message: "User is not found", error: err });
   }
+};
+
+//get logged-in user info
+export const getLoggedInUserInfo = (req: IAuthRequest, res: Response) => {
+  res.send(req.user);
 };

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { verify } from "jsonwebtoken";
 import { UserModel } from "../models/User.model";
 import { IUser } from "../interfaces/User.interface";
@@ -30,9 +30,9 @@ export const authMiddleware = async (
       if (!user) {
         res.sendStatus(401);
         return;
-      }
+      } 
       req.user = user;
-      console.log(req.user);
+      // console.log(req.user);
     } else {
       res.status(404).send({ message: "User not found" });
     }

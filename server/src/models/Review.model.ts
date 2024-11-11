@@ -5,7 +5,7 @@ const reviewSchema = new Schema<IReview>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     movie: { type: Schema.Types.ObjectId, ref: "Movie", required: true },
-    rating: { type: Number, required: true, min: 1, max: 10 },
+    rating: { type: Number, required: true, min: 0, max: 5 },
     review: { type: String, trim: true },
   },
   {

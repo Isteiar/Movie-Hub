@@ -6,7 +6,7 @@ export interface IMovie {
   title: string;
   thumbnail: string;
   description: string;
-  release: Date;
+  release: string;
   duration: number;
   genres: IGenre[];
   reviews: IReview[];

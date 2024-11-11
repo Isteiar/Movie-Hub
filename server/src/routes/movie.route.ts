@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   addAllMovies,
   createMovie,
-  getAllMovies,
+  getFilteredMovies,
   getPaginatedMovies,
   getSingleMovie,
 } from "../controllers/movie.controller";
@@ -13,8 +13,9 @@ const movieRouter = Router();
 movieRouter.post("/add-movie", authMiddleware, createMovie);
 movieRouter.post("/add-all-movies", addAllMovies);
 
-movieRouter.get("/", getAllMovies);
+// movieRouter.get("/", getAllMovies);
 movieRouter.get("/paginatedMovies", getPaginatedMovies);
-movieRouter.get("/:id", getSingleMovie);
+movieRouter.get("/movie-details/:id", getSingleMovie);
+movieRouter.post("/filteredMovies", getFilteredMovies);
 
 export default movieRouter;
